@@ -19,42 +19,48 @@ echo 9. Ejecutar Draw_Folder_Layout.py
 echo ================================
 set /p opcion="Ingrese el número del comando: "
 
-set "command="
-
 if "%opcion%"=="0" (
     echo Saliendo...
     exit /b
 ) else if "%opcion%"=="1" (
-    set "command=python -m venv myenv"
+    python -m venv myenv
+    pause
 ) else if "%opcion%"=="2" (
-    set "command=call myenv\Scripts\activate"
+    echo Activando el entorno virtual...
+    call myenv\Scripts\activate
+    if errorlevel 1 (
+        echo No se pudo activar el entorno virtual. Verifica si "myenv" existe.
+    ) else (
+        echo Entorno virtual activado.
+        echo Escribe "deactivate" para salir.
+        cmd /k
+    )
 ) else if "%opcion%"=="3" (
-    set "command=pip install -r requirements.txt"
+    call myenv\Scripts\activate && pip install -r requirements.txt && deactivate
+    pause
 ) else if "%opcion%"=="4" (
-    set "command=pip list"
+    call myenv\Scripts\activate && pip list && deactivate
+    pause
 ) else if "%opcion%"=="5" (
-    set "command=pip freeze > requirements.txt"
+    call myenv\Scripts\activate && pip freeze > requirements.txt && deactivate
+    pause
 ) else if "%opcion%"=="6" (
-    set "command=deactivate"
+    deactivate
+    pause
 ) else if "%opcion%"=="7" (
-    set "command=rd /s /q myenv"
+    rd /s /q myenv
+    echo Entorno virtual eliminado.
+    pause
 ) else if "%opcion%"=="8" (
-    set "command=python Create_Executables.py"
+    python Create_Executables.py
+    pause
 ) else if "%opcion%"=="9" (
-    set "command=python Draw_Folder_Layout.py"
+    python Draw_Folder_Layout.py
+    pause
 ) else (
     echo Comando no reconocido, por favor intente nuevamente.
     pause
     goto menu
-)
-
-if defined command (
-    %command%
-    if "%opcion%"=="2" (
-        echo Entorno virtual activado. 
-        echo Recuerda ejecutar "deactivate" para desactivarlo cuando termines.
-    )
-    pause
 )
 
 goto menu
